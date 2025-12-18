@@ -9,7 +9,7 @@
       font-family: Arial, sans-serif;
       background-color: #f3f4f6;
       text-align: center;
-      padding-top: 80px;
+      padding-top: 90px;
       margin: 0;
     }
 
@@ -24,6 +24,22 @@
       align-items: center;
       justify-content: space-between;
       padding: 10px 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .navbar h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .navbar button {
+      background: white;
+      color: #007BFF;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     h1 {
@@ -38,12 +54,14 @@
     }
 
     .block {
-      width: 200px;
+      width: 220px;
       height: 120px;
       background: white;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      line-height: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 18px;
       font-weight: bold;
       color: #333;
@@ -54,6 +72,7 @@
     .block:hover {
       background-color: #007BFF;
       color: white;
+      transform: scale(1.05);
     }
 
     a.back {
@@ -62,77 +81,81 @@
       color: #007BFF;
       text-decoration: none;
       font-weight: bold;
+      font-size: 16px;
     }
   </style>
 </head>
 
 <body>
 
-<div class="navbar">
-  <h2>BMSCE - Select Block</h2>
-  <button onclick="logout()">Logout</button>
-</div>
+  <div class="navbar">
+    <h2>BMSCE - Select Block</h2>
+    <button onclick="logout()">Logout</button>
+  </div>
 
-<h1>Select a Block</h1>
+  <h1>Select a Block</h1>
 
-<div class="block-container" id="blocks"></div>
+  <div class="block-container" id="blocks"></div>
 
-<a id="backBtn" class="back">⬅ Back</a>
+  <a id="backBtn" class="back">⬅ Back</a>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const action = params.get("action"); // ✅ take OR view
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get("action"); // take OR view
 
-// ✅ If action missing → invalid
-if (!action) {
-  alert("Invalid Access!");
-  window.location.href = "index.html";
-}
+    // ❌ Invalid access
+    if (!action || (action !== "take" && action !== "view")) {
+      alert("Invalid Access!");
+      window.location.href = "index.html";
+    }
 
-// ✅ Block list (NO extra spaces)
-const blocks = [
-  "PG Block",
-  "APS Block",
-  "Science Block",
-  "Mechanical Block",
-  "PJ Block"
-];
+    // ✅ Block list (MUST match JSON exactly)
+    const blocks = [
+      "PG Block",
+      "APS Block",
+      "Science Block",
+      "Mechanical Block",
+      "PJ Block"
+    ];
 
-const container = document.getElementById("blocks");
+    const container = document.getElementById("blocks");
 
-// ✅ Auto-generate correct links
-blocks.forEach(block => {
-  const a = document.createElement("a");
-  a.className = "block";
-  a.innerText = block;
-  a.href = `rooms.html?block=${encodeURIComponent(block)}&action=${action}`;
-  container.appendChild(a);
-});
+    // ✅ Create block cards
+    blocks.forEach(block => {
+      const a = document.createElement("a");
+      a.className = "block";
+      a.innerText = block;
+      a.href = `rooms.html?block=${encodeURIComponent(block)}&action=${action}`;
+      container.appendChild(a);
+    });
 
-// ✅ Auditorium link ALSO with action
-const audi = document.createElement("a");
-audi.className = "block";
-audi.innerText = "Auditorium";
-audi.href = `auditorium.html?action=${action}`;
-container.appendChild(audi);
+    // ✅ Auditorium
+    const audi = document.createElement("a");
+    audi.className = "block";
+    audi.innerText = "Auditorium";
+    audi.href = `auditorium.html?action=${action}`;
+    container.appendChild(audi);
 
-// ✅ Session check + Back button
-fetch("/auth/me", { credentials: "include" })
-.then(res => res.json())
-.then(user => {
-  document.getElementById("backBtn").href =
-    user.role === "faculty"
-      ? "faculty-dashboard.html"
-      : "student-dashboard.html";
-})
-.catch(() => {
-  window.location.href = "index.html";
-});
+    // ✅ Session check + Back button routing
+    fetch("/auth/me", { credentials: "include" })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(user => {
+        document.getElementById("backBtn").href =
+          user.role === "faculty"
+            ? "faculty-dashboard.html"
+            : "student-dashboard.html";
+      })
+      .catch(() => {
+        window.location.href = "index.html";
+      });
 
-function logout() {
-  window.location.href = "/auth/logout";
-}
-</script>
+    function logout() {
+      window.location.href = "/auth/logout";
+    }
+  </script>
 
 </body>
 </html>
