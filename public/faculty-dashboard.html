@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>Faculty Dashboard</title>
@@ -23,15 +22,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
-      padding: 10px 0;
+      padding: 12px 0;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
     .navbar h2 {
       margin: 0;
       font-size: 22px;
-      letter-spacing: 1px;
     }
 
     .logout-btn {
@@ -51,29 +48,44 @@
       color: white;
     }
 
-    .login-box {
+    .dashboard-box {
       background: white;
       display: inline-block;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 35px;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      min-width: 320px;
+    }
+
+    .dashboard-box h1 {
+      margin-bottom: 25px;
     }
 
     .option-btn {
       display: block;
-      width: 260px;
+      width: 280px;
       margin: 15px auto;
-      padding: 12px;
+      padding: 14px;
       background-color: #007BFF;
       color: white;
       text-decoration: none;
       border-radius: 6px;
       font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
+      border: none;
     }
 
     .option-btn:hover {
       background-color: #0056b3;
+    }
+
+    .danger {
+      background-color: #dc3545;
+    }
+
+    .danger:hover {
+      background-color: #b52a37;
     }
 
     footer {
@@ -91,47 +103,76 @@
 
 <body>
 
-  <header class="navbar">
-    <h2>BMSCE - Faculty Dashboard</h2>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <h2>BMSCE – Faculty Dashboard</h2>
     <button class="logout-btn" onclick="logout()">Logout</button>
-  </header>
-
-  <div class="login-box">
-    <h1>Welcome, Faculty</h1>
-
-    <a class="option-btn" href="blocks-dashboard.html?action=take">Take / Mark Class</a>
-    <a class="option-btn" href="blocks-dashboard.html?action=view">View Empty Classrooms</a>
   </div>
 
+  <!-- DASHBOARD -->
+  <div class="dashboard-box">
+    <h1>Welcome, Faculty</h1>
+
+    <a class="option-btn" href="blocks-dashboard.html?action=take">
+      Take / Mark Class
+    </a>
+
+    <a class="option-btn" href="blocks-dashboard.html?action=view">
+      View Empty Classrooms
+    </a>
+
+    <a class="option-btn" href="/api/reports/download" target="_blank">
+      Download Class Report
+    </a>
+
+    <button class="option-btn danger" onclick="clearReport()">
+      Clear Class Report
+    </button>
+  </div>
+
+  <!-- FOOTER -->
   <footer>
-    © 2025 BMS College of Engineering | All Rights Reserved
+    ©️ 2025 BMS College of Engineering | Empty Classroom Tracker
   </footer>
 
   <script>
-    
-  // ✅ Prevent students from opening faculty dashboard directly
-  fetch("/auth/me", {
-    credentials: "include"   // ✅ THIS IS THE FIX
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Not logged in");
-      return res.json();
-    })
-    .then(user => {
-      if (user.role !== "faculty") {
-        alert("Access denied! Faculty only.");
-        window.location.href = "student-dashboard.html";
-      }
-    })
-    .catch(() => {
-      window.location.href = "index.html";
-    });
+    // 🔐 PROTECT PAGE (FACULTY ONLY)
+    fetch("/auth/me", { credentials: "include" })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(user => {
+        if (user.role !== "faculty") {
+          alert("Access denied! Faculty only.");
+          window.location.href = "student-dashboard.html";
+        }
+      })
+      .catch(() => {
+        window.location.href = "index.html";
+      });
 
-  function logout() {
-    window.location.href = "/auth/logout";
-  }
-</script>
+    // 🚪 LOGOUT
+    function logout() {
+      window.location.href = "/auth/logout";
+    }
 
+    // 🧹 CLEAR REPORT
+    function clearReport() {
+      if (!confirm("Are you sure you want to CLEAR ALL class report data?")) return;
+
+      fetch("/api/reports/clear", {
+        method: "POST",
+        credentials: "include"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("Class report cleared successfully!");
+      })
+      .catch(() => {
+        alert("Error clearing report");
+      });
+    }
   </script>
 
 </body>
