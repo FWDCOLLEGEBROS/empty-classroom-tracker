@@ -1,68 +1,78 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
+const fs = require("fs");
+const path = require("path");
 const router = express.Router();
-const AudiBooking = require("../models/AudiBooking");
-const { requireLogin, isFaculty } = require("../middleware/authMiddleware");
 
-// ✅ GET SLOTS (ANY LOGGED-IN USER)
-router.get("/", requireLogin, async (req, res) => {
-  const { audi, date } = req.query;
+const dataFile = path.join(__dirname, "../users.json");
 
-  const slots = [
-    "9:00 AM - 11:00 AM",
-    "11:00 AM - 1:00 PM",
-    "2:00 PM - 4:00 PM",
-    "4:00 PM - 6:00 PM"
-  ];
+// ✅ Load users from file
+function loadUsers() {
+  if (!fs.existsSync(dataFile)) return [];
+  return JSON.parse(fs.readFileSync(dataFile, "utf8"));
+}
 
-  const bookings = await AudiBooking.find({ audiName: audi, date });
+// ✅ Save users to file
+function saveUsers(users) {
+  fs.writeFileSync(dataFile, JSON.stringify(users, null, 2));
+}
 
-  const output = slots.map(slot => {
-    const found = bookings.find(b => b.slot === slot);
-    return found
-      ? { slot, booked: true, bookedBy: found.bookedBy }
-      : { slot, booked: false };
+// ✅ SIGNUP (NO CAPTCHA)
+router.post("/signup", async (req, res) => {
+  const { name, email, password, role } = req.body;
+
+  if (!name || !email || !password || !role) {
+    return res.send("All fields required");
+  }
+
+  let users = loadUsers();
+
+  const exists = users.find(u => u.email === email);
+  if (exists) {
+    return res.send("User already exists");
+  }
+
+  const hash = await bcrypt.hash(password, 10);
+  users.push({ name, email, password: hash, role });
+
+  saveUsers(users);
+  res.send("Signup Success");
+});
+
+// ✅ LOGIN (SESSION FIXED)
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  let users = loadUsers();
+  const user = users.find(u => u.email === email);
+
+  if (!user) return res.send("NOT_REGISTERED");
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.send("INVALID");
+
+  req.session.user = {
+    email: user.email,
+    role: user.role
+  };
+
+  res.send(user.role); // faculty or student
+});
+
+// ✅ CHECK CURRENT LOGIN
+router.get("/me", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send("Not logged in");
+  }
+
+  res.json(req.session.user);
+});
+
+// ✅ LOGOUT
+router.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/index.html");
   });
-
-  res.json(output);
-});
-
-// ✅ BOOK SLOT (FACULTY ONLY)
-router.post("/book", requireLogin, isFaculty, async (req, res) => {
-  const { audi, date, slot } = req.body;
-
-  // ✅ FIX: use email (NOT _id)
-  const userEmail = req.session.user.email;
-
-  try {
-    await AudiBooking.create({
-      audiName: audi,
-      date,
-      slot,
-      bookedBy: userEmail
-    });
-
-    res.send("BOOKED");
-  } catch (err) {
-    res.send("ALREADY_BOOKED");
-  }
-});
-
-// ✅ CANCEL SLOT (ONLY SAME FACULTY)
-router.post("/cancel", requireLogin, isFaculty, async (req, res) => {
-  const { audi, date, slot } = req.body;
-  const userEmail = req.session.user.email;
-
-  const booking = await AudiBooking.findOne({ audiName: audi, date, slot });
-
-  if (!booking) return res.send("NOT_FOUND");
-
-  // ✅ FIX: Compare with email
-  if (booking.bookedBy !== userEmail) {
-    return res.status(403).send("NOT_ALLOWED");
-  }
-
-  await AudiBooking.deleteOne({ _id: booking._id });
-  res.send("CANCELLED");
 });
 
 module.exports = router;
