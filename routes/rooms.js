@@ -1,93 +1,77 @@
-// routes/rooms.js
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const router = express.Router();
 const { requireLogin, isFaculty } = require("../middleware/authMiddleware");
 
-const dataFile = path.join(__dirname, "../roomsData.json");
-const CLASS_DURATION_MS = 55 * 60 * 1000; // 55 minutes
+const roomsFile = path.join(__dirname, "../roomsData.json");
+const reportFile = path.join(__dirname, "../attendanceLogs.json");
 
-function loadRooms() {
-  if (!fs.existsSync(dataFile)) return {};
-  return JSON.parse(fs.readFileSync(dataFile, "utf8"));
-}
+const CLASS_DURATION = 55 * 60 * 1000;
 
-function saveRooms(data) {
-  fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
-}
+// helpers
+const loadRooms = () => JSON.parse(fs.readFileSync(roomsFile, "utf8"));
+const saveRooms = d => fs.writeFileSync(roomsFile, JSON.stringify(d, null, 2));
+const loadReports = () => JSON.parse(fs.readFileSync(reportFile, "utf8"));
+const saveReports = d => fs.writeFileSync(reportFile, JSON.stringify(d, null, 2));
 
-// 🔹 GET ROOMS (student + faculty)
+// ✅ GET ROOMS
 router.get("/", requireLogin, (req, res) => {
-  const block = req.query.block;
   const rooms = loadRooms();
-  res.json(rooms[block] || {});
+  res.json(rooms[req.query.block] || {});
 });
 
-// 🔹 UPDATE ROOM (faculty only)
+// ✅ UPDATE ROOM
 router.post("/update", requireLogin, isFaculty, (req, res) => {
   const { block, floor, roomNum } = req.body;
-  const userEmail = req.session.user.email; // we store email in JSON
+  const user = req.session.user;
 
   const rooms = loadRooms();
 
-  if (!rooms[block] || !rooms[block][floor]) {
-    return res.status(404).send("Block/Floor not found");
-  }
-
-  const room = rooms[block][floor].find(r => r.roomNum == roomNum);
-  if (!room) return res.status(404).send("Room not found");
-
-  // ✅ 1) If room is occupied by SOMEONE ELSE → block immediately
-  if (
-    room.status === "occupied" &&
-    room.markedBy &&
-    room.markedBy !== userEmail
-  ) {
-    return res
-      .status(403)
-      .send("This room is already taken by another faculty!");
-  }
-
-  // ✅ 2) Check if this faculty already has another active room
-  let hasOtherActive = false;
-
-  for (const b of Object.keys(rooms)) {
-    for (const fl of Object.keys(rooms[b])) {
-      for (const r of rooms[b][fl]) {
-        if (
-          r.status === "occupied" &&
-          r.markedBy === userEmail &&
-          !(b === block && fl === floor && r.roomNum == roomNum) // ignore current room
-        ) {
-          hasOtherActive = true;
-          break;
+  // ❌ already has another active class
+  for (const b in rooms) {
+    for (const f in rooms[b]) {
+      for (const r of rooms[b][f]) {
+        if (r.status === "occupied" && r.markedBy === user.email) {
+          if (!(b === block && f === floor && r.roomNum === roomNum)) {
+            return res.status(403).send("You already marked another class");
+          }
         }
       }
-      if (hasOtherActive) break;
     }
-    if (hasOtherActive) break;
   }
 
-  // If they are trying to TAKE a new room while another is active → block
-  if (hasOtherActive && room.status === "empty") {
-    return res
-      .status(403)
-      .send("You already have another class marked. Clear it first.");
+  const room = rooms[block][floor].find(r => r.roomNum === roomNum);
+
+  // ❌ occupied by other faculty
+  if (room.status === "occupied" && room.markedBy !== user.email) {
+    return res.status(403).send("Room already occupied");
   }
 
-  // ✅ 3) Toggle this room for this faculty
+  // 🔁 TOGGLE
   if (room.status === "empty") {
-    // mark as occupied
     room.status = "occupied";
-    room.markedBy = userEmail;
-    room.endTime = Date.now() + CLASS_DURATION_MS;
+    room.markedBy = user.email;
+    room.markedName = user.name;
+    room.startTime = Date.now();
+    room.endTime = room.startTime + CLASS_DURATION;
+
+    const reports = loadReports();
+    reports.push({
+      name: user.name,
+      email: user.email,
+      block,
+      floor,
+      roomNum,
+      startTime: room.startTime,
+      endTime: room.endTime
+    });
+    saveReports(reports);
   } else {
-    // room is occupied AND either:
-    //  - no markedBy (old data) OR
-    //  - markedBy === userEmail  (same faculty)
     room.status = "empty";
     room.markedBy = null;
+    room.markedName = null;
+    room.startTime = null;
     room.endTime = null;
   }
 
