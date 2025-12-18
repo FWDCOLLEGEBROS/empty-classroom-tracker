@@ -1,0 +1,508 @@
+{
+  "PG Block": {
+    "Ground Floor": [
+      {
+        "roomNum": "001",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null,
+        "startTime": null
+      },
+      {
+        "roomNum": "002",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null
+      },
+      {
+        "roomNum": "003",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null
+      },
+      {
+        "roomNum": "004",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null,
+        "startTime": null
+      },
+      {
+        "roomNum": "005",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null,
+        "startTime": null
+      }
+    ],
+    "First Floor": [
+      {
+        "roomNum": "101",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "102",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null,
+        "startTime": null
+      },
+      {
+        "roomNum": "103",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null,
+        "startTime": null
+      },
+      {
+        "roomNum": "104",
+        "status": "occupied",
+        "endTime": 1766047530333,
+        "markedBy": "vishal.cs24@bmsce.ac.in",
+        "markedName": "vishal.cs24",
+        "startTime": 1766044230333
+      },
+      {
+        "roomNum": "105",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null,
+        "markedName": null,
+        "startTime": null
+      }
+    ],
+    "Second Floor": [
+      {
+        "roomNum": "201",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "202",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "203",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "204",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "205",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ]
+  },
+  "APS Block": {
+    "Ground Floor": [
+      {
+        "roomNum": "001",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "002",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "003",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "004",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "005",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "First Floor": [
+      {
+        "roomNum": "101",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "102",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "103",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "104",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "105",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "Second Floor": [
+      {
+        "roomNum": "201",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "202",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "203",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "204",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "205",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ]
+  },
+  "Science Block": {
+    "Ground Floor": [
+      {
+        "roomNum": "001",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "002",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "003",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "004",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "005",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "First Floor": [
+      {
+        "roomNum": "101",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "102",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "103",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "104",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "105",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "Second Floor": [
+      {
+        "roomNum": "201",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "202",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "203",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "204",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "205",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ]
+  },
+  "Mechanical Block": {
+    "Ground Floor": [
+      {
+        "roomNum": "001",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "002",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "003",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "004",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "005",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "First Floor": [
+      {
+        "roomNum": "101",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "102",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "103",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "104",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "105",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "Second Floor": [
+      {
+        "roomNum": "201",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "202",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "203",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "204",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "205",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ]
+  },
+  "PJ Block": {
+    "Ground Floor": [
+      {
+        "roomNum": "001",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "002",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "003",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "004",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "005",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "First Floor": [
+      {
+        "roomNum": "101",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "102",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "103",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "104",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "105",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ],
+    "Second Floor": [
+      {
+        "roomNum": "201",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "202",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "203",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "204",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      },
+      {
+        "roomNum": "205",
+        "status": "empty",
+        "endTime": null,
+        "markedBy": null
+      }
+    ]
+  }
+}
